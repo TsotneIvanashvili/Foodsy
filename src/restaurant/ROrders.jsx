@@ -31,7 +31,7 @@ export default function ROrders() {
         )}
 
         <div className="sticky top-0 z-10 -mx-3 mt-3 bg-[#0b0b0f] px-3 pb-2 pt-1">
-          <div className="flex rounded-2xl bg-white/[.07] p-1">
+          <div data-tour="r-tabs" className="flex rounded-2xl bg-white/[.07] p-1">
             {['new', 'active', 'done'].map((k) => (
               <button key={k} onClick={() => setTab(k)} className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-[13px] font-extrabold transition ${tab === k ? 'bg-white text-black' : 'text-white/65'}`}>
                 {t(k === 'new' ? 'tabNew' : k === 'active' ? 'tabActive' : 'tabDone')}
@@ -99,7 +99,7 @@ function OrderCard({ o, highlight }) {
         <span className="font-black">{fmt(o.total)}</span>
       </div>
       {action && (
-        <button onClick={() => restaurantAction(o.id)} className={`mt-2.5 flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl text-[16px] font-black shadow-lg active:scale-[.98] ${action.cls}`}>
+        <button data-tour="r-action" onClick={() => restaurantAction(o.id)} className={`mt-2.5 flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl text-[16px] font-black shadow-lg active:scale-[.98] ${action.cls}`}>
           <Check size={19} strokeWidth={3} /> {action.label}
         </button>
       )}

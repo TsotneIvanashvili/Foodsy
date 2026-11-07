@@ -30,6 +30,13 @@ export function StoreProvider({ children }) {
   const [confirm, setConfirm] = useState(null)
   const toastTimer = useRef()
 
+  // first-visit guidance: slides per role + in-feed tips (remembered per browser)
+  const seen = (k) => { try { return localStorage.getItem(`foodsy_seen_${k}`) === '1' } catch { return false } }
+  const markSeen = (k) => { try { localStorage.setItem(`foodsy_seen_${k}`, '1') } catch { /* storage blocked */ } }
+  const [onboard, setOnboard] = useState(() => (seen('customer') ? null : 'customer'))
+  const finishOnboard = useCallback(() => { setOnboard((k) => { if (k) markSeen(k); return null }) }, [])
+  const showGuide = useCallback((k) => { setStack([]); setTab(k === 'restaurant' ? 'rOrders' : 'feed'); setOnboard(k) }, [])
+
   const t = useCallback(
     (key, vars) => {
       let s = STR[lang][key] ?? STR.ka[key] ?? key
@@ -67,6 +74,7 @@ export function StoreProvider({ children }) {
         const rid = lastMine ? lastMine.restaurantId : 'r1'
         setMyRid(rid)
         setTab('rOrders')
+        if (!seen('restaurant')) setOnboard('restaurant')
         showToast(STR[lang].switchedTo.replace('{r}', STR[lang].restaurant))
       } else {
         setTab('feed')
@@ -267,6 +275,7 @@ export function StoreProvider({ children }) {
     cart, addToCart, reorder, setQty, checkout, placeOrder, orders, advanceOrder, restaurantAction, addTestOrder,
     addReview, publishMedia, buyPromo, promos, uploads, feed,
     toast, showToast, myRid, setMyRid, confirm, setConfirm,
+    onboard, finishOnboard, showGuide,
   }
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }

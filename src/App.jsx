@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Flame, Zap, ReceiptText, User, LayoutDashboard, Upload, Rocket, ClipboardList, ShoppingBag } from 'lucide-react'
-import { StoreProvider, useStore, fmt } from './store'
+import { Flame, Zap, ReceiptText, User, LayoutDashboard, Upload, Rocket, ClipboardList } from 'lucide-react'
+import { StoreProvider, useStore } from './store'
 import Feed from './screens/Feed'
 import Reality from './screens/Reality'
 import Hungry from './screens/Hungry'
@@ -13,6 +13,7 @@ import ROrders from './restaurant/ROrders'
 import RDashboard from './restaurant/RDashboard'
 import RUpload from './restaurant/RUpload'
 import RPromote from './restaurant/RPromote'
+import Tour from './screens/Tour'
 
 const CUSTOMER_TABS = [
   { id: 'feed', icon: Flame, C: Feed },
@@ -40,7 +41,7 @@ function BottomNav() {
         const on = tab === id
         const badge = id === 'orders' ? activeMine : id === 'rOrders' ? newForMe : 0
         return (
-          <button key={id} onClick={() => setTab(id)} className={`relative flex h-[58px] flex-1 flex-col items-center justify-center gap-1 transition ${on ? 'text-white' : 'text-white/45'}`}>
+          <button key={id} data-tour={`nav-${id}`} onClick={() => setTab(id)} className={`relative flex h-[58px] flex-1 flex-col items-center justify-center gap-1 transition ${on ? 'text-white' : 'text-white/45'}`}>
             {id === 'hungry' ? (
               <span className={`flex h-7 w-11 items-center justify-center rounded-xl ${on ? 'bg-gradient-to-r from-[#ff3d57] to-[#ff7a1a]' : 'bg-white/10'}`}>
                 <Icon size={17} className={on ? 'fill-white' : ''} />
@@ -56,21 +57,6 @@ function BottomNav() {
         )
       })}
     </nav>
-  )
-}
-
-function CartPill() {
-  const { cart, role, stack, tab, push, t, restById, L } = useStore()
-  if (role !== 'customer' || !cart.items.length || stack.length || !['feed', 'hungry'].includes(tab)) return null
-  const n = cart.items.reduce((s, i) => s + i.qty, 0)
-  const sum = cart.items.reduce((s, i) => s + i.qty * i.price, 0)
-  return (
-    <button onClick={() => push({ type: 'checkout' })} className="anim-fade-up absolute bottom-[calc(var(--safe-bottom)+66px)] left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-extrabold text-black shadow-2xl">
-      <ShoppingBag size={17} />
-      <span>{t('cart')} · {n}</span>
-      <span className="max-w-[110px] truncate text-black/50">{L(restById(cart.rid).name)}</span>
-      <span>{fmt(sum)}</span>
-    </button>
   )
 }
 
@@ -116,9 +102,9 @@ function Screen() {
         const { key, ...props } = o
         return <O key={key} {...props} isTop={i === stack.length - 1} />
       })}
-      <CartPill />
       <Toast />
       <Confirm />
+      <Tour />
     </div>
   )
 }

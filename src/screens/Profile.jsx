@@ -1,11 +1,11 @@
-import { User, Store, ShieldCheck, ChevronDown, Bookmark, Globe } from 'lucide-react'
+import { User, Store, ShieldCheck, ChevronDown, Bookmark, Globe, HelpCircle, ChevronRight } from 'lucide-react'
 import { useStore } from '../store'
 import { ME, RESTAURANTS, matchScore } from '../data'
 import { Img, MatchPill, Seg, Cert } from '../ui'
 import { OrderRow } from './Orders'
 
 export default function Profile() {
-  const { role, setRole, t, L, lang, setLang, saved, dishById, orders, dishes, push, myRid, setMyRid, restById } = useStore()
+  const { role, setRole, showGuide, t, L, lang, setLang, saved, dishById, orders, dishes, push, myRid, setMyRid, restById } = useStore()
   const mine = orders.filter((o) => o.mine).sort((a, b) => b.createdAt - a.createdAt)
   const myReviews = dishes.reduce((s, d) => s + d.reviews.filter((r) => r.mine).length, 0) + 6
   const savedList = [...saved].map(dishById).filter(Boolean)
@@ -79,6 +79,16 @@ export default function Profile() {
         <span className="flex-1 text-[14px] font-bold">{t('language')}</span>
         <Seg className="w-40" value={lang} onChange={setLang} options={[{ value: 'ka', label: 'ქართული' }, { value: 'en', label: 'English' }]} />
       </div>
+
+      {/* replay guide */}
+      <button onClick={() => showGuide(role)} className="mt-3 flex w-full items-center gap-3 rounded-3xl bg-white/[.06] p-4 text-left active:scale-[.99]">
+        <HelpCircle size={18} className="text-[#ff6b7f]" />
+        <span className="flex-1">
+          <span className="block text-[14px] font-bold">{t('howItWorks')}</span>
+          <span className="block text-[11.5px] text-white/45">{t('howItWorksSub')}</span>
+        </span>
+        <ChevronRight size={18} className="text-white/30" />
+      </button>
 
       {role === 'customer' && (
         <>

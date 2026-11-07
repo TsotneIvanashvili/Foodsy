@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Heart, Bookmark, Share2, Clock, MapPin, Star, ChevronUp, Eye, Megaphone, Sparkles, Film, Camera } from 'lucide-react'
 import { useStore, fmt } from '../store'
 import { CATEGORIES, matchScore } from '../data'
-import { Media, MatchRing, Cert, Stars, LangToggle, Img } from '../ui'
+import { Media, MatchRing, Cert, Stars, LangToggle, Img, CartButton } from '../ui'
 
 export default function Feed() {
   const { feed, t, L, stack, dishById } = useStore()
@@ -109,16 +109,19 @@ export default function Feed() {
 
       {/* top bar */}
       <div className="shade-top pointer-events-none absolute inset-x-0 top-0 z-10 pb-6 pt-[calc(var(--safe-top)+4px)]">
-        <div className="pointer-events-auto flex items-center justify-between px-4">
+        <div className="pointer-events-auto relative flex h-9 items-center justify-between px-4">
           <div className="text-[22px] font-black tracking-tight">
             <span className="bg-gradient-to-r from-[#ff3d57] to-[#ff9a3d] bg-clip-text text-transparent">Foodsy</span>
           </div>
-          <div className="flex items-center gap-1 text-[15px] font-extrabold">
+          <div className="absolute left-1/2 -translate-x-1/2 text-[15px] font-extrabold">
             <span className="border-b-2 border-white pb-0.5">{t('forYou')}</span>
           </div>
-          <LangToggle />
+          <div className="flex items-center gap-2">
+            <CartButton />
+            <LangToggle />
+          </div>
         </div>
-        <div className="no-scrollbar pointer-events-auto mt-2.5 flex gap-1.5 overflow-x-auto px-3">
+        <div data-tour="cats" className="no-scrollbar pointer-events-auto mt-2.5 flex gap-1.5 overflow-x-auto px-3">
           {CATEGORIES.map((c) => (
             <button
               key={c.id}
@@ -192,7 +195,7 @@ function FeedCard({ c, active, near, eager, canClick }) {
       <div className="absolute left-3 right-3 top-[calc(var(--safe-top)+88px)] flex items-start justify-between">
         <Label c={c} />
         <div className="flex flex-col items-center gap-2">
-          <button onClick={openReality} className="rounded-full active:scale-95">
+          <button data-tour="match" onClick={openReality} className="rounded-full active:scale-95">
             <MatchRing score={score} size={64} />
           </button>
           {pip && (
@@ -221,7 +224,7 @@ function FeedCard({ c, active, near, eager, canClick }) {
 
       {/* info */}
       <div className="absolute inset-x-0 bottom-0 px-3.5 pb-3">
-        <div className="pr-16">
+        <div data-tour="dish" className="rounded-2xl pr-16">
           <div className="flex items-center gap-1.5 text-[13px] font-bold text-white/90 text-shadow">
             <span className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black" style={{ background: r.color }}>{L(r.name)[0]}</span>
             <span className="truncate">{L(r.name)}</span>
@@ -245,12 +248,13 @@ function FeedCard({ c, active, near, eager, canClick }) {
           )}
         </div>
         <div className="mt-3 flex gap-2">
-          <button onClick={openReality} className="flex h-[50px] items-center gap-1.5 rounded-2xl bg-white/15 px-3.5 text-[13px] font-extrabold backdrop-blur active:scale-95">
+          <button data-tour="reality" onClick={openReality} className="flex h-[50px] items-center gap-1.5 rounded-2xl bg-white/15 px-3.5 text-[13px] font-extrabold backdrop-blur active:scale-95">
             <Eye size={17} />
             {t('reality')}
             <span className="rounded-full bg-green-500 px-1.5 text-[11px]">{photos.length}</span>
           </button>
           <button
+            data-tour="order"
             onClick={stop(() => addToCart(d.id))}
             className="flex h-[50px] flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#ff3d57] to-[#ff7a1a] text-[15px] font-black shadow-lg shadow-[#ff3d57]/30 active:scale-[.97]"
           >

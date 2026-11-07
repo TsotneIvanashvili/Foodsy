@@ -27,6 +27,8 @@ On a desktop browser the app shows inside a phone frame that scales to fit the w
 
 The KA/EN toggle is in the header of every screen.
 
+First visit starts a spotlight tour (8 short steps over the real UI: dish card, Match Score, რეალობა, შეკვეთა, categories, მშია ახლა, profile). The restaurant panel has its own 6-step tour the first time. Move with → / ← (or the keyboard arrows), skip with **გამოტოვება** or Esc. Both are remembered per browser; replay them before the pitch from **პროფილი → როგორ მუშაობს Foodsy?** or use a private window.
+
 ## Media
 
 - Restaurant videos are portrait (9:16) clips from Pexels and restaurant photos from Unsplash. Both load from their CDNs, so the demo needs internet.

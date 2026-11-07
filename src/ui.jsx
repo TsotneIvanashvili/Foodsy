@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, BadgeCheck, Star } from 'lucide-react'
+import { ChevronLeft, BadgeCheck, Star, ShoppingBag } from 'lucide-react'
 import { useStore } from './store'
 
 export function Img({ src, className = '', alt = '', eager = false }) {
@@ -172,6 +172,24 @@ export function Seg({ options, value, onChange, className = '' }) {
         </button>
       ))}
     </div>
+  )
+}
+
+// Icon-only cart button with item-count badge; hidden while the cart is empty
+export function CartButton() {
+  const { cart, push, t } = useStore()
+  const n = cart.items.reduce((s, i) => s + i.qty, 0)
+  if (!n) return null
+  return (
+    <button
+      key={n}
+      onClick={() => push({ type: 'checkout' })}
+      aria-label={t('cart')}
+      className="anim-pop relative flex h-8 w-8 items-center justify-center rounded-full bg-black/40 backdrop-blur active:scale-90"
+    >
+      <ShoppingBag size={17} />
+      <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#ff3d57] px-1 text-[10px] font-black leading-none">{n}</span>
+    </button>
   )
 }
 

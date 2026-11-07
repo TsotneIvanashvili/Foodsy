@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Clock, MapPin, Zap, Star } from 'lucide-react'
 import { useStore, fmt } from '../store'
 import { CATEGORIES, matchScore } from '../data'
-import { Img, MatchPill, Cert, LangToggle } from '../ui'
+import { Img, MatchPill, Cert, LangToggle, CartButton } from '../ui'
 
 const PRICES = [10, 15, 25, 0]
 const WAITS = [15, 20, 30, 0]
@@ -42,7 +42,10 @@ export default function Hungry() {
             <div className="text-[26px] font-black leading-tight">{t('hungryTitle')}</div>
             <div className="text-[13px] text-white/50">{t('hungrySub')}</div>
           </div>
-          <LangToggle />
+          <div className="flex items-center gap-2">
+            <CartButton />
+            <LangToggle />
+          </div>
         </div>
         <div className="no-scrollbar -mx-4 mt-3 flex gap-1.5 overflow-x-auto px-4">
           {CATEGORIES.map((c) => (
