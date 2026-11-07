@@ -47,7 +47,7 @@ export function Media({ m, active = true, near = false, kb = true, eager = false
           preload={active ? 'auto' : 'metadata'}
           onPlaying={() => setPlaying(true)}
           onError={() => setVidErr(true)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${playing && active ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${playing && active ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
     </div>

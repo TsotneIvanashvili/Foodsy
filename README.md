@@ -15,7 +15,7 @@ On a desktop browser the app shows inside a phone frame that scales to fit the w
 
 ## Pitch path (about 2 minutes)
 
-1. **Feed** — swipe up with the mouse wheel, trackpad, a drag, or the ↑/↓ keys. Card 3 is a "✅ ნამდვილი შეკვეთა" (real order) card.
+1. **Feed** — swipe up with the mouse wheel, trackpad, a drag, or the ↑/↓ keys. Card 3 is a "✅ ნამდვილი შეკვეთა" (real order) card; card 1 is the khachapuri video.
 2. Tap **რეალობა** (or the Match ring, or the small photo) to see restaurant media vs customer photos, the Match Score and the reviews.
 3. **შეკვეთა** → choose **გატანა** (pickup) → **გადახდა**. The payment is a mock.
 4. The tracking screen advances on its own: accepted → preparing → ready → picked up. **დემო: შემდეგი ეტაპი ⏩** skips ahead one step.
@@ -29,6 +29,6 @@ The KA/EN toggle is in the header of every screen.
 
 ## Media
 
-- Restaurant videos come from Mixkit and restaurant photos from Unsplash. Both load from their CDNs, so the demo needs internet.
+- Restaurant videos are portrait (9:16) clips from Pexels and restaurant photos from Unsplash. Both load from their CDNs, so the demo needs internet.
 - Customer photos come from Wikimedia Commons and are bundled in `public/media`. They are bundled because Wikimedia rate-limits hotlinking.
 - If any image fails to load, it falls back to a placeholder. If a video fails, the card shows its poster image with a slow zoom.

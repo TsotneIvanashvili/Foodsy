@@ -238,11 +238,11 @@ export function StoreProvider({ children }) {
     const restCard = (d, extra = {}) => ({ key: `${d.id}-r-${extra.tag || ''}`, dishId: d.id, kind: d.media[0].type === 'video' ? 'video' : 'photo', media: d.media[0], ...extra })
     promos.forEach((p) => { const d = dishById(p.dishId); if (d) { cards.push(restCard(d, { promo: true, tag: 'promo' })); used.add(d.id) } })
     uploads.forEach((u) => { const d = dishById(u.dishId); if (d && !used.has(d.id)) { cards.push(restCard(d, { fresh: true, tag: 'up' })); used.add(d.id) } })
-    const VORDER = ['d12', 'd19', 'd5', 'd9', 'd23', 'd20', 'd13', 'd26', 'd17', 'd14', 'd28', 'd21']
+    const VORDER = ['d1', 'd9', 'd12', 'd19', 'd5', 'd3', 'd23', 'd20', 'd15', 'd13', 'd26', 'd17', 'd14', 'd21', 'd28', 'd24', 'd22', 'd11']
     const rank = (id) => { const i = VORDER.indexOf(id); return i < 0 ? 99 : i }
     const videos = dishes.filter((d) => d.media[0].type === 'video' && !used.has(d.id)).sort((a, b) => rank(a.id) - rank(b.id))
     const photos = dishes.filter((d) => d.media[0].type !== 'video' && !used.has(d.id))
-    const custIds = ['d1', 'd3', 'd9', 'd15', 'd21', 'd23', 'd12', 'd7']
+    const custIds = ['d3', 'd9', 'd1', 'd15', 'd21', 'd23', 'd12', 'd7']
     const custCards = custIds.map((id) => {
       const d = dishById(id)
       const rv = d.reviews.find((r) => r.photo)
