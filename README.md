@@ -13,21 +13,37 @@ For a production build: `npm run build`, then `npm run preview`.
 
 On a desktop browser the app shows inside a phone frame that scales to fit the window. On a phone (≤520px wide) it runs full screen.
 
-## Pitch path (about 2 minutes)
+## Pitch path (about 3 minutes)
 
-1. **Feed** — swipe up with the mouse wheel, trackpad, a drag, or the ↑/↓ keys. Card 3 is a "✅ ნამდვილი შეკვეთა" (real order) card; card 1 is the khachapuri video.
-2. Tap **რეალობა** (or the Match ring, or the small photo) to see restaurant media vs customer photos, the Match Score and the reviews.
-3. **შეკვეთა** → choose **გატანა** (pickup) → **გადახდა**. The payment is a mock.
-4. The tracking screen advances on its own: accepted → preparing → ready → picked up. **დემო: შემდეგი ეტაპი ⏩** skips ahead one step.
-5. **დატოვე შეფასება** → choose stars → **კი** → **სადემო ფოტო** (or upload a real photo) → **გაგზავნა**.
-6. The AI check takes about 2 seconds and approves the photo. **ნახე რეალობაში** then shows the new photo and the Match Score going up (86% → 87%).
-   - The **უარყოფილი მაგალითი** button on the review form shows a rejected photo.
-7. Go to **პროფილი** → tap **რესტორანი**. The panel opens for the restaurant you just ordered from, and your order and review are pinned at the top.
-8. **დაფა** (dashboard) shows the free period, 15% vs ~30% commission, stats and Match Score per dish. **ატვირთვა** (upload) → TikTok import. **პრომო** (promote) → buy. Switching back to the customer role puts the promoted dish first in the feed.
+Every page load starts signed out, at the welcome screen. Accounts are mock: any email and a 6+ character password work, and **სადემო მონაცემებით შევსება** fills the form.
+
+1. **რეგისტრაცია** → fill in → **რეგისტრაცია**. The feed opens with a guided tour (6 steps after the greeting):
+   1. the **შეკვეთა** button is highlighted first, as the main action;
+   2. the user swipes up for real;
+   3. taps the Match Score ring, which opens **რეალობა** (restaurant video vs real customer photos);
+   4. taps **შეკვეთა** inside Reality, which opens checkout;
+   5. sees pickup vs delivery → **დასრულება**.
+
+   **გამოტოვება** or Esc skips the tour at any time.
+2. Checkout: **გატანა** (pickup) → **გადახდა**. The payment is a mock.
+3. Tracking advances on its own: accepted → preparing → ready → picked up. **დემო: შემდეგი ეტაპი ⏩** skips ahead.
+4. **დატოვე შეფასება** → stars → **კი** → **სადემო ფოტო** (or upload a real photo) → **გაგზავნა**. The AI check approves it in about 2 seconds. **ნახე რეალობაში** shows the new photo and the Match Score going up.
+   - **უარყოფილი მაგალითი** on the review form shows a rejected photo.
+5. **პროფილი** → **რესტორანი**. The panel opens for the restaurant you just ordered from, with your order and review pinned at the top. The first time, a 6-step restaurant tour runs.
+6. **დაფა** (dashboard): free period, 15% vs ~30% commission, stats, Match Score per dish. **ატვირთვა** → TikTok import. **პრომო** → buy.
+
+Other entry points:
+- **შესვლა** (log in) goes straight to the feed with no tour.
+- **რესტორანი ხარ? შედი პარტნიორად** (partner login) opens the restaurant panel directly.
+- To replay the customer tour, open **პროფილი → როგორ მუშაობს Foodsy?**. **გასვლა** in Profile logs out.
+
+The restaurant tour is shown once per browser. To show it again, use the Profile button above or a private window.
 
 The KA/EN toggle is in the header of every screen.
 
-First visit starts a spotlight tour (8 short steps over the real UI: dish card, Match Score, რეალობა, შეკვეთა, categories, მშია ახლა, profile). The restaurant panel has its own 6-step tour the first time. Move with → / ← (or the keyboard arrows), skip with **გამოტოვება** or Esc. Both are remembered per browser; replay them before the pitch from **პროფილი → როგორ მუშაობს Foodsy?** or use a private window.
+## Design
+
+Light, minimal UI (white surfaces, one red accent for primary actions). Only the full-screen video feed is dark, and its bottom navigation turns black to match. Design tokens live in `src/index.css` (`@theme`), and shared components in `src/ui.jsx`.
 
 ## Media
 

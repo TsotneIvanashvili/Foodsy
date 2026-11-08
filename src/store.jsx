@@ -30,12 +30,19 @@ export function StoreProvider({ children }) {
   const [confirm, setConfirm] = useState(null)
   const toastTimer = useRef()
 
-  // first-visit guidance: slides per role + in-feed tips (remembered per browser)
+  // auth (mock): nobody is signed in on load, so every pitch starts at the welcome screen
+  const [user, setUser] = useState(null)
+  const me = useMemo(() => (user ? { ka: user.name, en: user.name } : ME.short), [user])
+
+  // guidance: customer tour runs right after registration; restaurant tour on first panel visit
   const seen = (k) => { try { return localStorage.getItem(`foodsy_seen_${k}`) === '1' } catch { return false } }
   const markSeen = (k) => { try { localStorage.setItem(`foodsy_seen_${k}`, '1') } catch { /* storage blocked */ } }
-  const [onboard, setOnboard] = useState(() => (seen('customer') ? null : 'customer'))
+  const [onboard, setOnboard] = useState(null)
+  const [tourEvent, setTourEvent] = useState(null)
   const finishOnboard = useCallback(() => { setOnboard((k) => { if (k) markSeen(k); return null }) }, [])
   const showGuide = useCallback((k) => { setStack([]); setTab(k === 'restaurant' ? 'rOrders' : 'feed'); setOnboard(k) }, [])
+  // screens report user actions; the interactive tour advances when its step's action happens
+  const tourSignal = useCallback((evt) => setTourEvent({ evt, n: Date.now() + Math.random() }), [])
 
   const t = useCallback(
     (key, vars) => {
@@ -143,12 +150,12 @@ export function StoreProvider({ children }) {
       const o = {
         id: `o-${Date.now()}`, no: nextOrderNo(), restaurantId: rid, items: items.map((i) => ({ ...i })), mode,
         itemsTotal, serviceFee: SERVICE_FEE, deliveryFee, total: itemsTotal + SERVICE_FEE + deliveryFee,
-        status: 'new', createdAt: Date.now(), customer: ME.short, mine: true, auto: true, reviewed: false,
+        status: 'new', createdAt: Date.now(), customer: me, mine: true, auto: true, reviewed: false,
       }
       setOrders((os) => [o, ...os])
       return o
     },
-    [],
+    [me],
   )
 
   const checkout = useCallback(
@@ -218,7 +225,7 @@ export function StoreProvider({ children }) {
       const d = dishes.find((x) => x.id === dishId)
       const oldScore = matchScore(d.reviews)
       const rv = {
-        id: `${dishId}-new-${Date.now()}`, author: ME.short, match, stars, text: text ? { ka: text, en: text } : null,
+        id: `${dishId}-new-${Date.now()}`, author: me, match, stars, text: text ? { ka: text, en: text } : null,
         photo, daysAgo: 0, verified: true, isNew: true, mine: true, createdAt: Date.now(),
       }
       const newReviews = [rv, ...d.reviews]
@@ -226,7 +233,7 @@ export function StoreProvider({ children }) {
       setOrders((os) => os.map((o) => (o.id === orderId ? { ...o, reviewed: true, reviewDishId: dishId } : o)))
       return { oldScore, newScore: matchScore(newReviews) }
     },
-    [dishes],
+    [dishes, me],
   )
 
   // restaurant uploads
@@ -269,13 +276,33 @@ export function StoreProvider({ children }) {
     return cards
   }, [dishes, promos, uploads, dishById])
 
+  const signIn = useCallback(
+    ({ name, email, asRole = 'customer', isNew = false }) => {
+      const nm = (name || email.split('@')[0] || '').trim()
+      setUser({ name: /^[a-z]/.test(nm) ? nm.charAt(0).toUpperCase() + nm.slice(1) : nm, email }) // keep Georgian as typed (uppercasing gives Mtavruli)
+      setStack([])
+      setRoleState(asRole)
+      if (asRole === 'restaurant') {
+        setTab('rOrders')
+        if (!seen('restaurant')) setOnboard('restaurant')
+      } else {
+        setTab('feed')
+        if (isNew) setOnboard('customer')
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  const signOut = useCallback(() => { setUser(null); setStack([]); setOnboard(null); setRoleState('customer'); setTab('feed') }, [])
+
   const value = {
     lang, setLang, t, L, role, setRole, tab, setTab: goTab, stack, push, pop, replaceTop,
     dishes, dishById, restById, liked, toggleLike, saved, toggleSave,
     cart, addToCart, reorder, setQty, checkout, placeOrder, orders, advanceOrder, restaurantAction, addTestOrder,
     addReview, publishMedia, buyPromo, promos, uploads, feed,
     toast, showToast, myRid, setMyRid, confirm, setConfirm,
-    onboard, finishOnboard, showGuide,
+    onboard, finishOnboard, showGuide, tourEvent, tourSignal,
+    user, me, signIn, signOut,
   }
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
